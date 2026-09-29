@@ -1,0 +1,15 @@
+# Fichier: docker-compose.yml
+# Emplacement: Project_homeserver/nas/docker-compose.yml
+# Langage: YAML (Docker Compose)
+# Role: construit et lance le conteneur rsyslog-harmonisation, ouvre le port 1514/udp,
+#       et conserve les logs harmonises sur le disque meme si le conteneur redemarre.
+
+services:
+  rsyslog-harmonisation:
+    build: ./rsyslog
+    container_name: rsyslog-harmonisation
+    ports:
+      - "1514:1514/udp"
+    volumes:
+      - ./rsyslog/logs:/var/log/harmonise
+    restart: unless-stopped
