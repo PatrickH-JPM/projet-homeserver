@@ -1,0 +1,56 @@
+# Fichier: docker-compose.yml
+# Emplacement: Project_homeserver/nas/monitoring/docker-compose.yml
+# Langage: YAML (Docker Compose)
+# Role: lance ensemble Loki (stockage des logs), Promtail (collecte depuis le fichier
+#       harmonise.log de la Phase 1) et Grafana (interface web de visualisation).
+
+version: "3.8"
+
+networks:
+  monitoring:
+    driver: bridge
+  homeserver-net:
+    external: true
+
+volumes:
+  loki-data:
+  grafana-data:
+
+services:
+  loki:
+    image: grafana/loki:2.9.0
+    container_name: loki
+    restart: unless-stopped
+    volumes:
+      - ./loki-config.yml:/etc/loki/local-config.yaml
+      - loki-data:/loki
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - monitoring
+
+  promtail:
+    image: grafana/promtail:2.9.0
+    container_name: promtail
+    restart: unless-stopped
+    volumes:
+      - ./promtail-config.yml:/etc/promtail/config.yml
+      - /volume1/docker/rsyslog-harmonise:/var/log/harmonise:ro
+      - /volume1/docker/reverse-proxy/logs:/var/log/nginx:ro
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki
+    networks:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana:11.1.0
+    container_name: grafana
+    restart: unless-stopped
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./provisioning:/etc/grafana/provisioning
+    depends_on:
+      - loki
+    networks:
+      - monitoring
+      - homeserver-net

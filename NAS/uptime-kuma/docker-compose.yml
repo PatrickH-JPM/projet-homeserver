@@ -1,0 +1,19 @@
+# Fichier: docker-compose.yml
+# Emplacement: Project_homeserver/nas/uptime-kuma/docker-compose.yml
+# Langage: YAML (Docker Compose)
+# Role: lance Uptime Kuma, l'interface web qui surveille en continu la disponibilite
+#       des services (port du jeu, conteneurs, machines du reseau) et envoie une
+#       notification si l'un d'eux devient indisponible.
+
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:1.23.13
+    container_name: uptime-kuma
+    ports:
+      - "3001:3001"
+    volumes:
+      - uptime-kuma-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  uptime-kuma-data:

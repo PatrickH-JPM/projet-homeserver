@@ -1,0 +1,21 @@
+# Fichier: promtail-config.yml
+# Emplacement: Project_homeserver/nas/monitoring/promtail-config.yml
+# Langage: YAML (configuration Promtail)
+# Role: lit le fichier de logs harmonises produit par rsyslog, et l'envoie a Loki
+#       pour qu'il soit consultable et filtrable dans Grafana.
+
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+positions:
+  filename: /tmp/positions.yaml
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+scrape_configs:
+  - job_name: logs-harmonises
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: harmonise
+          __path__: /var/log/harmonise/harmonise.log
