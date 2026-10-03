@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+tmpfile=$(mktemp)
+trap 'rm -f "$tmpfile"' EXIT
+if /usr/sbin/nft list table inet Home_server_host >/dev/null 2>&1; then
+  printf 'delete table inet Home_server_host\n' > "$tmpfile"
+fi
+cat /etc/Home_server-host.nft >> "$tmpfile"
+/usr/sbin/nft -c -f "$tmpfile"
+/usr/sbin/nft -f "$tmpfile"

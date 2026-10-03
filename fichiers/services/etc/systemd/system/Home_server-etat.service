@@ -1,0 +1,9 @@
+[Unit]
+Description=Mesure locale des services et conteneurs
+After=docker.service
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/usr/local/sbin/Home_server-etat.py
+TimeoutStartSec=45

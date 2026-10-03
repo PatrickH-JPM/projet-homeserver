@@ -1,0 +1,14 @@
+host: 0.0.0.0
+port: 9940
+enable_metrics:
+  players_online_total: true
+  tps: true
+  tick_duration_average: true
+  tick_duration_max: true
+  jvm_memory: true
+  jvm_gc: true
+  jvm_threads: true
+  loaded_chunks_total: true
+  entities_total: true
+  player_online: false
+  player_statistic: false

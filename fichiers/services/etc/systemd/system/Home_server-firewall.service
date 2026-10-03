@@ -1,0 +1,12 @@
+[Unit]
+Description=Politique reseau du Home_server Minecraft
+After=network-pre.target
+Before=docker.service crowdsec-firewall-bouncer.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/Home_server-firewall
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

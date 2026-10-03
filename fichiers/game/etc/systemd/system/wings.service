@@ -1,0 +1,17 @@
+[Unit]
+Description=Pterodactyl Wings
+Requires=docker.service Home_server-firewall.service
+After=docker.service Home_server-firewall.service network-online.target
+StartLimitIntervalSec=180
+StartLimitBurst=5
+
+[Service]
+User=root
+WorkingDirectory=/etc/pterodactyl
+ExecStart=/usr/local/bin/wings
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

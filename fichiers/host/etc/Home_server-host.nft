@@ -1,0 +1,26 @@
+table inet Home_server_host {
+  chain input {
+    type filter hook input priority 10; policy drop;
+    iifname "lo" accept
+    ct state invalid drop
+    ct state established,related accept
+    iifname "br-mgmt" ip saddr {10.10.10.2,10.10.10.4,@@PC_IP@@} tcp dport 22 accept
+    iifname "br-mgmt" ip saddr 192.168.5.10 tcp dport 9100 accept
+    ip protocol icmp icmp type destination-unreachable accept
+    limit rate 5/minute burst 10 packets log prefix "FW-HOTE "
+  }
+  chain output {
+    type filter hook output priority 10; policy drop;
+    oifname "lo" accept
+    ct state invalid drop
+    ct state established,related accept
+    ip daddr 192.168.5.10 tcp dport 1514 accept
+    ip daddr {10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,
+      100.64.0.0/10,169.254.0.0/16,@@FAMILY_CIDR@@} drop
+    ip daddr {@@DNS1@@,@@DNS2@@} udp dport 53 accept
+    ip daddr {@@DNS1@@,@@DNS2@@} tcp dport 53 accept
+    udp dport 123 accept
+    tcp dport {80,443} accept
+    limit rate 5/minute burst 10 packets log prefix "FW-HOTE-OUT "
+  }
+}

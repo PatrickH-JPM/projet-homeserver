@@ -1,0 +1,7 @@
+{
+  "host": "RELAIS_SMTP_REEL",
+  "user": "COMPTE_SMTP",
+  "password": "SECRET_LOCAL",
+  "from": "ADRESSE_EXPEDITEUR",
+  "to": "TON_ADRESSE"
+}

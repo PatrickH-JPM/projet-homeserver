@@ -1,0 +1,120 @@
+#!/bin/bash
+set -euo pipefail
+source /etc/Home_server-firewall.env
+[[ "$ROLE" == game || "$ROLE" == services ]]
+[[ "$NIC" =~ ^[a-zA-Z0-9_.:-]+$ ]]
+[[ -n "$DNS_IPS" && -n "$FAMILY_CIDR" ]]
+IPT=/usr/sbin/iptables-legacy
+IP6=/usr/sbin/ip6tables-legacy
+ipset create cs-Home_server-v4 hash:ip timeout 0 -exist
+$IPT -N DOCKER-USER 2>/dev/null || true
+# Verrou de rechargement. En cas d'erreur, il reste ferme.
+for c in INPUT OUTPUT DOCKER-USER; do
+  $IPT -I "$c" 1 -m comment --comment PJ-RELOAD -j DROP
+done
+$IPT -P INPUT DROP
+$IPT -P OUTPUT DROP
+$IPT -P FORWARD DROP
+for c in INPUT OUTPUT FORWARD; do $IP6 -P "$c" DROP; done
+for c in PJ-IN PJ-OUT PJ-DKR; do
+  $IPT -N "$c" 2>/dev/null || true
+  $IPT -F "$c"
+done
+
+$IPT -A PJ-IN -i lo -j ACCEPT
+$IPT -A PJ-IN -m conntrack --ctstate INVALID -j DROP
+$IPT -A PJ-IN -m set --match-set cs-Home_server-v4 src -m limit --limit 10/min -j LOG --log-prefix "CS-BLOCK "
+$IPT -A PJ-IN -m set --match-set cs-Home_server-v4 src -j DROP
+$IPT -A PJ-IN -m conntrack --ctstate ESTABLISHED -j ACCEPT
+$IPT -A PJ-IN -i "$NIC" -s "$ADMIN_IP" -p tcp --dport 22 -j ACCEPT
+$IPT -A PJ-IN -i "$NIC" -s "@@PC_IP@@" -p tcp --dport 22 -j ACCEPT
+$IPT -A PJ-IN -i "$NIC" -s 10.10.10.4 -p tcp --dport 22 -j ACCEPT
+if [[ "$ROLE" == game ]]; then
+  for ip in "$ADMIN_IP" "10.10.10.4" "$FRIEND_IP" "@@PC_IP@@"; do
+    $IPT -A PJ-IN -i "$NIC" -s "$ip" -p tcp --dport 2022 -j ACCEPT
+  done
+  for p in 8080 9100; do
+    $IPT -A PJ-IN -i "$NIC" -s "$SVC_IP" -p tcp --dport "$p" -j ACCEPT
+  done
+else
+  for ip in "$ADMIN_IP" "10.10.10.4" "$FRIEND_IP" "$GAME_IP" "@@PC_IP@@"; do
+    $IPT -A PJ-IN -i "$NIC" -s "$ip" -p tcp --dport 443 -j ACCEPT
+  done
+  for ip in "$GAME_IP" "$HOST_IP"; do
+    $IPT -A PJ-IN -i "$NIC" -s "$ip" -p tcp --dport 1514 -j ACCEPT
+  done
+  $IPT -A PJ-IN -i "$NIC" -s "$ROUTER_SYSLOG_IP" -p udp --dport 514 -j ACCEPT
+fi
+$IPT -A PJ-IN -p icmp --icmp-type destination-unreachable -j ACCEPT
+$IPT -A PJ-IN -p icmp --icmp-type time-exceeded -j ACCEPT
+$IPT -A PJ-IN -m limit --limit 5/min --limit-burst 10 -j LOG --log-prefix 'FW-SERVEUR-IN '
+$IPT -A PJ-IN -j DROP
+
+$IPT -A PJ-OUT -o lo -j ACCEPT
+$IPT -A PJ-OUT -m conntrack --ctstate INVALID -j DROP
+$IPT -A PJ-OUT -m conntrack --ctstate ESTABLISHED -j ACCEPT
+if [[ "$ROLE" == game ]]; then
+  for p in 443 1514; do $IPT -A PJ-OUT -d "$SVC_IP" -p tcp --dport "$p" -j ACCEPT; done
+else
+  for p in 8080 9100 9940; do $IPT -A PJ-OUT -d "$GAME_IP" -p tcp --dport "$p" -j ACCEPT; done
+  $IPT -A PJ-OUT -d "$HOST_IP" -p tcp --dport 9100 -j ACCEPT
+fi
+PRIVATE_NETS=(10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 100.64.0.0/10 169.254.0.0/16 "$FAMILY_CIDR")
+for n in "${PRIVATE_NETS[@]}"; do
+  $IPT -A PJ-OUT -d "$n" -m limit --limit 12/min -j LOG --log-prefix "PROTECTED-OUT "
+  $IPT -A PJ-OUT -d "$n" -j DROP
+done
+for dns in $DNS_IPS; do
+  for proto in udp tcp; do $IPT -A PJ-OUT -d "$dns" -p "$proto" --dport 53 -j ACCEPT; done
+done
+$IPT -A PJ-OUT -p udp --dport 123 -j ACCEPT
+for p in 80 443; do $IPT -A PJ-OUT -p tcp --dport "$p" -j ACCEPT; done
+if [[ "$ROLE" == services ]]; then
+  for ip in $SMTP_IPS; do $IPT -A PJ-OUT -d "$ip" -p tcp --dport 587 -j ACCEPT; done
+fi
+$IPT -A PJ-OUT -m limit --limit 5/min --limit-burst 10 -j LOG --log-prefix 'FW-SERVEUR-OUT '
+$IPT -A PJ-OUT -j DROP
+
+$IPT -A PJ-DKR -m conntrack --ctstate INVALID -j DROP
+$IPT -A PJ-DKR -m set --match-set cs-Home_server-v4 src -m limit --limit 10/min -j LOG --log-prefix "CS-BLOCK "
+$IPT -A PJ-DKR -m set --match-set cs-Home_server-v4 src -j DROP
+$IPT -A PJ-DKR -m conntrack --ctstate ESTABLISHED -j RETURN
+for t in destination-unreachable time-exceeded; do
+  $IPT -A PJ-DKR -p icmp --icmp-type "$t" -m conntrack --ctstate RELATED -j RETURN
+done
+if [[ "$ROLE" == game ]]; then
+  # Correspondance sur la destination originale avant DNAT Docker.
+  MC=(-i "$NIC" -p tcp -m conntrack --ctstate NEW --ctorigdst "$GAME_IP" --ctorigdstport 49150)
+  $IPT -A PJ-DKR "${MC[@]}" -m hashlimit --hashlimit-above 60/minute \
+    --hashlimit-burst 30 --hashlimit-mode srcip --hashlimit-name mc_new -j DROP
+  $IPT -A PJ-DKR "${MC[@]}" -m connlimit --connlimit-above 50 --connlimit-mask 32 -j DROP
+  $IPT -A PJ-DKR "${MC[@]}" -m limit --limit 10/min --limit-burst 20 -j LOG --log-prefix 'MC-PUBLIC-NEW ' --log-level info
+  $IPT -A PJ-DKR "${MC[@]}" -j RETURN
+  $IPT -A PJ-DKR -i "$NIC" -s "$SVC_IP" -p tcp -m conntrack \
+    --ctstate NEW --ctorigdst "$GAME_IP" --ctorigdstport 9940 -j RETURN
+fi
+$IPT -A PJ-DKR -i "$NIC" -m limit --limit 5/min --limit-burst 10 -j LOG --log-prefix 'FW-DOCKER-IN '
+$IPT -A PJ-DKR -i "$NIC" -j DROP
+for n in "${PRIVATE_NETS[@]}"; do
+  $IPT -A PJ-DKR -d "$n" -m limit --limit 12/min -j LOG --log-prefix "PROTECTED-DKR "
+  $IPT -A PJ-DKR -d "$n" -j DROP
+done
+for dns in $DNS_IPS; do
+  for proto in udp tcp; do $IPT -A PJ-DKR -o "$NIC" -d "$dns" -p "$proto" --dport 53 -j RETURN; done
+done
+for p in 80 443; do $IPT -A PJ-DKR -o "$NIC" -p tcp --dport "$p" -j RETURN; done
+$IPT -A PJ-DKR -m limit --limit 5/min --limit-burst 10 -j LOG --log-prefix 'FW-DOCKER-OUT '
+$IPT -A PJ-DKR -j DROP
+
+for spec in 'INPUT PJ-IN' 'OUTPUT PJ-OUT' 'DOCKER-USER PJ-DKR'; do
+  read -r parent child <<< "$spec"
+  while $IPT -C "$parent" -j "$child" 2>/dev/null; do $IPT -D "$parent" -j "$child"; done
+  # Apres le verrou, avant toutes les regles anterieures.
+  $IPT -I "$parent" 2 -j "$child"
+done
+# Retirer exclusivement les verrous inseres par ce programme.
+for c in INPUT OUTPUT DOCKER-USER; do
+  while $IPT -C "$c" -m comment --comment PJ-RELOAD -j DROP 2>/dev/null; do
+    $IPT -D "$c" -m comment --comment PJ-RELOAD -j DROP
+  done
+done

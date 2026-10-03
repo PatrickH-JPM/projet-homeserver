@@ -1,0 +1,11 @@
+{
+  "nic": "A_RENSEIGNER",
+  "family_cidr": "A_RENSEIGNER",
+  "dns_ips": [
+    "9.9.9.9",
+    "149.112.112.112"
+  ],
+  "smtp_ips": [],
+  "router_syslog_ip": "192.168.5.1",
+  "pc_ip": "192.168.2.50"
+}

@@ -1,0 +1,12 @@
+[Unit]
+Description=Filtrage local de l hyperviseur
+Before=libvirtd.service libvirt-guests.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/Home_server-host-firewall
+ExecReload=/usr/local/sbin/Home_server-host-firewall
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

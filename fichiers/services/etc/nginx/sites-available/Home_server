@@ -1,0 +1,79 @@
+server {
+    listen 192.168.5.10:443 ssl default_server;
+    server_name _;
+    include snippets/Home_server-tls.conf;
+    return 444;
+}
+server {
+    listen 192.168.5.10:443 ssl;
+    server_name panel.home.arpa;
+    include snippets/Home_server-tls.conf;
+    allow 10.10.10.3;
+    allow 10.10.10.2;
+    allow 10.10.10.4;
+    allow @@PC_IP@@;
+    allow 192.168.4.10;
+    deny all;
+    root /var/www/pterodactyl/public;
+    index index.php;
+    client_max_body_size 100m;
+    location / { try_files $uri $uri/ /index.php?$query_string; }
+    location ~ \.php$ {
+        try_files $uri =404;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param HTTP_PROXY "";
+        fastcgi_param HTTP_X_FORWARDED_FOR "";
+        fastcgi_param HTTP_X_FORWARDED_PROTO "";
+        fastcgi_param HTTPS on;
+        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+    }
+    location ~ /\. { deny all; }
+}
+server {
+    listen 192.168.5.10:443 ssl;
+    server_name grafana.home.arpa;
+    include snippets/Home_server-tls.conf;
+    allow 10.10.10.2;
+    allow 10.10.10.4;
+    allow @@PC_IP@@;
+    deny all;
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+    }
+}
+server {
+    listen 192.168.5.10:443 ssl;
+    server_name wings.home.arpa;
+    include snippets/Home_server-tls.conf;
+    allow 10.10.10.3;
+    allow 10.10.10.2;
+    allow 10.10.10.4;
+    allow @@PC_IP@@;
+    allow 192.168.5.10;
+    deny all;
+    client_max_body_size 100m;
+    location / {
+        proxy_pass https://192.168.4.10:8080;
+        proxy_ssl_verify on;
+        proxy_ssl_trusted_certificate /etc/Home_server-pki/services-ca.crt;
+        proxy_ssl_verify_depth 2;
+        proxy_ssl_name wings-game.home.arpa;
+        proxy_ssl_server_name on;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+        proxy_read_timeout 3600s;
+    }
+}

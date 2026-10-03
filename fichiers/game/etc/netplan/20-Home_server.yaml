@@ -1,0 +1,10 @@
+network:
+  version: 2
+  ethernets:
+    @@NIC@@:
+      dhcp4: false
+      dhcp6: false
+      accept-ra: false
+      addresses: [192.168.4.10/24]
+      routes: [{to: default, via: 192.168.4.1}]
+      nameservers: {addresses: [@@DNS1@@, @@DNS2@@]}

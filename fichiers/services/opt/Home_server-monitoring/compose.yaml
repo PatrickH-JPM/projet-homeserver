@@ -1,0 +1,72 @@
+services:
+  loki:
+    image: ${IMAGE_LOKI:?digest obligatoire}
+    user: "10001:10001"
+    network_mode: host
+    command: [-config.file=/etc/loki/config.yaml]
+    restart: unless-stopped
+    mem_limit: 1g
+    cpus: 0.35
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    volumes:
+      - ./loki.yaml:/etc/loki/config.yaml:ro
+      - /var/lib/Home_server-monitoring/loki:/loki
+  prometheus:
+    image: ${IMAGE_PROMETHEUS:?digest obligatoire}
+    user: "65534:65534"
+    network_mode: host
+    command:
+      - --config.file=/etc/prometheus/prometheus.yaml
+      - --web.listen-address=127.0.0.1:9090
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=15d
+      - --storage.tsdb.retention.size=2GB
+    restart: unless-stopped
+    mem_limit: 768m
+    cpus: 0.25
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
+      - /var/lib/Home_server-monitoring/prometheus:/prometheus
+  grafana:
+    image: ${IMAGE_GRAFANA:?digest obligatoire}
+    user: "472:472"
+    network_mode: host
+    restart: unless-stopped
+    mem_limit: 512m
+    cpus: 0.25
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    environment:
+      GF_SERVER_HTTP_ADDR: 127.0.0.1
+      GF_SERVER_ROOT_URL: https://grafana.home.arpa
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?secret obligatoire}
+      GF_SECURITY_COOKIE_SECURE: "true"
+      GF_DASHBOARDS_MIN_REFRESH_INTERVAL: 1s
+    volumes:
+      - /var/lib/Home_server-monitoring/grafana:/var/lib/grafana
+      - ./provisioning:/etc/grafana/provisioning:ro
+      - ./dashboards:/var/lib/grafana-dashboards:ro
+  alloy:
+    image: ${IMAGE_ALLOY:?digest obligatoire}
+    user: "473:473"
+    group_add: ["${ADM_GID:?groupe adm requis}"]
+    network_mode: host
+    command:
+      - run
+      - --server.http.listen-addr=127.0.0.1:12345
+      - --storage.path=/var/lib/alloy
+      - /etc/alloy/config.alloy
+    restart: unless-stopped
+    mem_limit: 256m
+    cpus: 0.15
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    volumes:
+      - ./config.alloy:/etc/alloy/config.alloy:ro
+      - /var/log/Home_server:/var/log/Home_server:ro
+      - /var/lib/Home_server-monitoring/alloy:/var/lib/alloy

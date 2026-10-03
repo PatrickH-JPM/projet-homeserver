@@ -1,0 +1,408 @@
+[
+  {
+    "role": "host",
+    "source": "fichiers/host/etc/netplan/20-Home_server.yaml",
+    "destination": "/etc/netplan/20-Home_server.yaml",
+    "mode": "0600",
+    "stage": true
+  },
+  {
+    "role": "host",
+    "source": "fichiers/host/etc/sysctl.d/70-Home_server.conf",
+    "destination": "/etc/sysctl.d/70-Home_server.conf",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "host",
+    "source": "fichiers/host/etc/Home_server-host.nft",
+    "destination": "/etc/Home_server-host.nft",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "host",
+    "source": "fichiers/host/usr/local/sbin/Home_server-host-firewall",
+    "destination": "/usr/local/sbin/Home_server-host-firewall",
+    "mode": "0750",
+    "stage": false
+  },
+  {
+    "role": "host",
+    "source": "fichiers/host/etc/systemd/system/Home_server-host-firewall.service",
+    "destination": "/etc/systemd/system/Home_server-host-firewall.service",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "game",
+    "source": "fichiers/game/etc/netplan/20-Home_server.yaml",
+    "destination": "/etc/netplan/20-Home_server.yaml",
+    "mode": "0600",
+    "stage": true
+  },
+  {
+    "role": "game",
+    "source": "fichiers/game/etc/docker/daemon.json",
+    "destination": "/etc/docker/daemon.json",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "game",
+    "source": "fichiers/game/etc/Home_server-firewall.env",
+    "destination": "/etc/Home_server-firewall.env",
+    "mode": "0600",
+    "stage": false
+  },
+  {
+    "role": "game",
+    "source": "fichiers/game/usr/local/sbin/Home_server-firewall",
+    "destination": "/usr/local/sbin/Home_server-firewall",
+    "mode": "0750",
+    "stage": false
+  },
+  {
+    "role": "game",
+    "source": "fichiers/game/etc/systemd/system/Home_server-firewall.service",
+    "destination": "/etc/systemd/system/Home_server-firewall.service",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "game",
+    "source": "fichiers/game/etc/systemd/system/docker.service.d/20-Home_server-firewall.conf",
+    "destination": "/etc/systemd/system/docker.service.d/20-Home_server-firewall.conf",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "game",
+    "source": "fichiers/game/usr/local/sbin/Home_server-etat.py",
+    "destination": "/usr/local/sbin/Home_server-etat.py",
+    "mode": "0750",
+    "stage": false
+  },
+  {
+    "role": "game",
+    "source": "fichiers/game/etc/systemd/system/Home_server-etat.service",
+    "destination": "/etc/systemd/system/Home_server-etat.service",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "game",
+    "source": "fichiers/game/etc/systemd/system/Home_server-etat.timer",
+    "destination": "/etc/systemd/system/Home_server-etat.timer",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "game",
+    "source": "fichiers/game/etc/rsyslog.d/25-Home_server-fichiers.conf",
+    "destination": "/etc/rsyslog.d/25-Home_server-fichiers.conf",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "game",
+    "source": "fichiers/game/etc/systemd/system/rsyslog.service.d/20-Home_server-firewall.conf",
+    "destination": "/etc/systemd/system/rsyslog.service.d/20-Home_server-firewall.conf",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "game",
+    "source": "fichiers/game/etc/systemd/system/wings.service.d/20-Home_server-firewall.conf",
+    "destination": "/etc/systemd/system/wings.service.d/20-Home_server-firewall.conf",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "game",
+    "source": "fichiers/game/etc/systemd/system/crowdsec-firewall-bouncer.service.d/20-Home_server-firewall.conf",
+    "destination": "/etc/systemd/system/crowdsec-firewall-bouncer.service.d/20-Home_server-firewall.conf",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/etc/netplan/20-Home_server.yaml",
+    "destination": "/etc/netplan/20-Home_server.yaml",
+    "mode": "0600",
+    "stage": true
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/etc/docker/daemon.json",
+    "destination": "/etc/docker/daemon.json",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/etc/Home_server-firewall.env",
+    "destination": "/etc/Home_server-firewall.env",
+    "mode": "0600",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/usr/local/sbin/Home_server-firewall",
+    "destination": "/usr/local/sbin/Home_server-firewall",
+    "mode": "0750",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/etc/systemd/system/Home_server-firewall.service",
+    "destination": "/etc/systemd/system/Home_server-firewall.service",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/etc/systemd/system/docker.service.d/20-Home_server-firewall.conf",
+    "destination": "/etc/systemd/system/docker.service.d/20-Home_server-firewall.conf",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/usr/local/sbin/Home_server-etat.py",
+    "destination": "/usr/local/sbin/Home_server-etat.py",
+    "mode": "0750",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/etc/systemd/system/Home_server-etat.service",
+    "destination": "/etc/systemd/system/Home_server-etat.service",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/etc/systemd/system/Home_server-etat.timer",
+    "destination": "/etc/systemd/system/Home_server-etat.timer",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/etc/rsyslog.d/25-Home_server-fichiers.conf",
+    "destination": "/etc/rsyslog.d/25-Home_server-fichiers.conf",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/etc/systemd/system/rsyslog.service.d/20-Home_server-firewall.conf",
+    "destination": "/etc/systemd/system/rsyslog.service.d/20-Home_server-firewall.conf",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/etc/systemd/system/nginx.service.d/20-Home_server-firewall.conf",
+    "destination": "/etc/systemd/system/nginx.service.d/20-Home_server-firewall.conf",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/etc/systemd/system/crowdsec-firewall-bouncer.service.d/20-Home_server-firewall.conf",
+    "destination": "/etc/systemd/system/crowdsec-firewall-bouncer.service.d/20-Home_server-firewall.conf",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "game",
+    "source": "fichiers/game/etc/systemd/system/wings.service",
+    "destination": "/etc/systemd/system/wings.service",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/etc/systemd/system/pteroq.service",
+    "destination": "/etc/systemd/system/pteroq.service",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/etc/cron.d/Home_server-panel",
+    "destination": "/etc/cron.d/Home_server-panel",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/etc/nginx/snippets/Home_server-tls.conf",
+    "destination": "/etc/nginx/snippets/Home_server-tls.conf",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/etc/nginx/conf.d/20-Home_server-websocket.conf",
+    "destination": "/etc/nginx/conf.d/20-Home_server-websocket.conf",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/etc/nginx/sites-available/Home_server",
+    "destination": "/etc/nginx/sites-available/Home_server",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/etc/rsyslog.d/20-Home_server-collecteur.conf",
+    "destination": "/etc/rsyslog.d/20-Home_server-collecteur.conf",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "host",
+    "source": "fichiers/host/etc/rsyslog.d/60-Home_server-transfert.conf",
+    "destination": "/etc/rsyslog.d/60-Home_server-transfert.conf",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "game",
+    "source": "fichiers/game/etc/rsyslog.d/60-Home_server-transfert.conf",
+    "destination": "/etc/rsyslog.d/60-Home_server-transfert.conf",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/etc/logrotate.d/Home_server-harmonise",
+    "destination": "/etc/logrotate.d/Home_server-harmonise",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/usr/local/sbin/Home_server-mail.py",
+    "destination": "/usr/local/sbin/Home_server-mail.py",
+    "mode": "0755",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/etc/systemd/system/Home_server-mail.service",
+    "destination": "/etc/systemd/system/Home_server-mail.service",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/etc/systemd/system/Home_server-mail.timer",
+    "destination": "/etc/systemd/system/Home_server-mail.timer",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/opt/Home_server-monitoring/compose.yaml",
+    "destination": "/opt/Home_server-monitoring/compose.yaml",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/opt/Home_server-monitoring/loki.yaml",
+    "destination": "/opt/Home_server-monitoring/loki.yaml",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/opt/Home_server-monitoring/config.alloy",
+    "destination": "/opt/Home_server-monitoring/config.alloy",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/opt/Home_server-monitoring/prometheus.yaml",
+    "destination": "/opt/Home_server-monitoring/prometheus.yaml",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/opt/Home_server-monitoring/provisioning/datasources/datasources.yaml",
+    "destination": "/opt/Home_server-monitoring/provisioning/datasources/datasources.yaml",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/opt/Home_server-monitoring/provisioning/dashboards/Home_server.yaml",
+    "destination": "/opt/Home_server-monitoring/provisioning/dashboards/Home_server.yaml",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/opt/Home_server-monitoring/dashboards/systemes.json",
+    "destination": "/opt/Home_server-monitoring/dashboards/systemes.json",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/opt/Home_server-monitoring/dashboards/minecraft.json",
+    "destination": "/opt/Home_server-monitoring/dashboards/minecraft.json",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "host",
+    "source": "fichiers/host/usr/local/sbin/Home_server-etat.py",
+    "destination": "/usr/local/sbin/Home_server-etat.py",
+    "mode": "0750",
+    "stage": false
+  },
+  {
+    "role": "host",
+    "source": "fichiers/host/etc/systemd/system/Home_server-etat.service",
+    "destination": "/etc/systemd/system/Home_server-etat.service",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "host",
+    "source": "fichiers/host/etc/systemd/system/Home_server-etat.timer",
+    "destination": "/etc/systemd/system/Home_server-etat.timer",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "host",
+    "source": "fichiers/host/etc/systemd/system/libvirtd.service.d/20-Home_server-firewall.conf",
+    "destination": "/etc/systemd/system/libvirtd.service.d/20-Home_server-firewall.conf",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "host",
+    "source": "fichiers/host/etc/systemd/system/libvirt-guests.service.d/20-Home_server-firewall.conf",
+    "destination": "/etc/systemd/system/libvirt-guests.service.d/20-Home_server-firewall.conf",
+    "mode": "0644",
+    "stage": false
+  },
+  {
+    "role": "services",
+    "source": "fichiers/services/opt/Home_server-monitoring/dashboards/reseau.json",
+    "destination": "/opt/Home_server-monitoring/dashboards/reseau.json",
+    "mode": "0644",
+    "stage": false
+  }
+]

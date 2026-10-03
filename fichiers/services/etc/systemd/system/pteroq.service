@@ -1,0 +1,15 @@
+[Unit]
+Description=File de travaux Pterodactyl
+After=network.target mariadb.service redis-server.service
+Requires=mariadb.service redis-server.service
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/pterodactyl
+ExecStart=/usr/bin/php artisan queue:work --queue=high,standard,low --sleep=3 --tries=3
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
