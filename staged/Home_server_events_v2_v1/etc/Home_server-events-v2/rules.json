@@ -1,0 +1,36 @@
+{
+  "rules": [
+    {
+      "id": "system.oom",
+      "regex": "out of memory|oom-killer|oom killed|killed process .* out of memory",
+      "category": "SYSTEME",
+      "level": "CRITIQUE",
+      "type": "system.oom",
+      "message": "Mémoire insuffisante / OOM détecté : {message}"
+    },
+    {
+      "id": "system.kernel_panic",
+      "regex": "kernel panic|not syncing",
+      "category": "SYSTEME",
+      "level": "CRITIQUE",
+      "type": "system.kernel_panic",
+      "message": "Erreur noyau critique : {message}"
+    },
+    {
+      "id": "system.service_failed",
+      "regex": "failed to start|failed with result|main process exited.*status=.*failure",
+      "category": "SYSTEME",
+      "level": "ALERTE",
+      "type": "system.service_failed",
+      "message": "Échec de service : {message}"
+    },
+    {
+      "id": "tls.expiring",
+      "regex": "SECURITY certificat expire dans moins de 30 jours",
+      "category": "SYSTEME",
+      "level": "ALERTE",
+      "type": "tls.expiring",
+      "message": "Certificat TLS proche de l'expiration : {message}"
+    }
+  ]
+}

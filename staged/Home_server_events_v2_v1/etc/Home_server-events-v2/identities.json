@@ -1,0 +1,6 @@
+{
+  "10.10.10.2": {"name": "PC-Grenoble", "owner": "Patrick", "trusted": true},
+  "10.10.10.3": {"name": "PC-Ami", "owner": "Ami", "trusted": true},
+  "10.10.10.4": {"name": "Portable", "owner": "Patrick", "trusted": true},
+  "192.168.2.100": {"name": "PC-Tours", "owner": "Patrick", "trusted": true}
+}

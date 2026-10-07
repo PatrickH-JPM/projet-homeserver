@@ -1,0 +1,9 @@
+/var/log/Home_server/evenements-v2.jsonl {
+    daily
+    rotate 14
+    compress
+    delaycompress
+    missingok
+    notifempty
+    create 0640 Home_serverevents adm
+}

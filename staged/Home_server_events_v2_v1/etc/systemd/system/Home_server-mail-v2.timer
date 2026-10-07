@@ -1,0 +1,10 @@
+[Unit]
+Description=Home_server alertes mail V2
+
+[Timer]
+OnBootSec=45s
+OnUnitActiveSec=30s
+Unit=Home_server-mail-v2.service
+
+[Install]
+WantedBy=timers.target

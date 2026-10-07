@@ -1,0 +1,76 @@
+#!/usr/bin/python3
+"""Affichage temps réel lisible des événements Home_server V2."""
+from __future__ import annotations
+import argparse
+import json
+import os
+from pathlib import Path
+import sys
+import time
+
+LOG = Path('/var/log/Home_server/evenements-v2.jsonl')
+RESET='\033[0m'
+COLORS={
+    'INFO':'\033[37m',
+    'ALERTE':'\033[38;5;208m',
+    'CRITIQUE':'\033[1;31m',
+}
+
+def format_event(e):
+    return '{date} {heure} | {source:<8} | {categorie:<12} | [{niveau:<8}] | {message}'.format(
+        date=e.get('date',''), heure=e.get('heure',''), source=e.get('source','')[:8],
+        categorie=e.get('categorie','')[:12], niveau=e.get('niveau','INFO')[:8], message=e.get('message',''))
+
+def match(e, args):
+    if args.source and e.get('source') not in args.source: return False
+    if args.category and e.get('categorie') not in args.category: return False
+    if args.level and e.get('niveau') not in args.level: return False
+    return True
+
+def main():
+    ap=argparse.ArgumentParser()
+    ap.add_argument('--all', action='store_true', help='Afficher aussi l historique existant.')
+    ap.add_argument('--source', action='append', help='Filtrer une source (répétable).')
+    ap.add_argument('--category', action='append', help='Filtrer une catégorie (répétable).')
+    ap.add_argument('--level', action='append', choices=['INFO','ALERTE','CRITIQUE'], help='Filtrer un niveau.')
+    ap.add_argument('--no-color', action='store_true')
+    ap.add_argument('--no-compact', action='store_true', help='Ne pas réécrire la dernière ligne pour les compteurs.')
+    args=ap.parse_args()
+    use_color=sys.stdout.isatty() and not args.no_color
+    compact=sys.stdout.isatty() and not args.no_compact
+    last_key=None
+    fh=None; inode=None
+    while True:
+        try: st=LOG.stat()
+        except FileNotFoundError:
+            time.sleep(.25); continue
+        if fh is None or inode != st.st_ino:
+            if fh: fh.close()
+            fh=LOG.open('r',encoding='utf-8',errors='replace'); inode=st.st_ino
+            if not args.all: fh.seek(0,os.SEEK_END)
+            args.all=True
+        line=fh.readline()
+        if not line:
+            time.sleep(.15); continue
+        try: e=json.loads(line)
+        except ValueError: continue
+        if not match(e,args): continue
+        text=format_event(e)
+        color=COLORS.get(e.get('niveau','INFO'),'') if use_color else ''
+        reset=RESET if use_color else ''
+        key=e.get('event_key')
+        repeated=int(e.get('count',1) or 1)>1
+        if compact and repeated and key==last_key:
+            sys.stdout.write('\r\033[2K'+color+text+reset)
+            sys.stdout.flush()
+        else:
+            if compact and last_key is not None:
+                sys.stdout.write('\n')
+            sys.stdout.write(color+text+reset)
+            sys.stdout.flush()
+        last_key=key
+
+if __name__=='__main__':
+    try: main()
+    except KeyboardInterrupt:
+        print()
