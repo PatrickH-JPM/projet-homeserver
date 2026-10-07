@@ -1,0 +1,13 @@
+Netid State  Recv-Q Send-Q  Local Address:Port Peer Address:PortProcess                                                 
+udp   UNCONN 0      0       192.168.122.1:53        0.0.0.0:*    users:(("dnsmasq",pid=1477,fd=5))                      
+udp   UNCONN 0      0          127.0.0.54:53        0.0.0.0:*    users:(("systemd-resolve",pid=743,fd=16))              
+udp   UNCONN 0      0       127.0.0.53%lo:53        0.0.0.0:*    users:(("systemd-resolve",pid=743,fd=14))              
+udp   UNCONN 0      0      0.0.0.0%virbr0:67        0.0.0.0:*    users:(("dnsmasq",pid=1477,fd=3))                      
+udp   UNCONN 0      0           127.0.0.1:323       0.0.0.0:*    users:(("chronyd",pid=1004,fd=5))                      
+udp   UNCONN 0      0               [::1]:323          [::]:*    users:(("chronyd",pid=1004,fd=6))                      
+tcp   LISTEN 0      4096    127.0.0.53%lo:53        0.0.0.0:*    users:(("systemd-resolve",pid=743,fd=15))              
+tcp   LISTEN 0      4096       127.0.0.54:53        0.0.0.0:*    users:(("systemd-resolve",pid=743,fd=17))              
+tcp   LISTEN 0      4096          0.0.0.0:22        0.0.0.0:*    users:(("sshd",pid=15539,fd=3),("systemd",pid=1,fd=91))
+tcp   LISTEN 0      32      192.168.122.1:53        0.0.0.0:*    users:(("dnsmasq",pid=1477,fd=6))                      
+tcp   LISTEN 0      4096     192.168.3.10:9100      0.0.0.0:*    users:(("prometheus-node",pid=801,fd=3))               
+tcp   LISTEN 0      4096             [::]:22           [::]:*    users:(("sshd",pid=15539,fd=4),("systemd",pid=1,fd=92))

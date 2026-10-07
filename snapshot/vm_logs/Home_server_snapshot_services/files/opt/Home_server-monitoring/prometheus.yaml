@@ -1,0 +1,20 @@
+global:
+  scrape_interval: 2s
+  evaluation_interval: 2s
+  scrape_timeout: 1s
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: [127.0.0.1:9090]
+  - job_name: node
+    static_configs:
+      - targets: [192.168.3.10:9100]
+        labels: {machine: Home_server}
+      - targets: [192.168.4.10:9100]
+        labels: {machine: Home_server_mc}
+      - targets: [127.0.0.1:9100]
+        labels: {machine: Home_server_services}
+  - job_name: minecraft
+    static_configs:
+      - targets: [192.168.4.10:9940]
+        labels: {server_name: minecraft}

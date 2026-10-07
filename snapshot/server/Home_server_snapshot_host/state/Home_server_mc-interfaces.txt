@@ -1,0 +1,4 @@
+ Interface   Type     Source    Model    MAC
+------------------------------------------------------------
+ vnet1       bridge   br-game   virtio   52:54:00:48:04:10
+

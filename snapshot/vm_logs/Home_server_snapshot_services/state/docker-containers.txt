@@ -1,0 +1,5 @@
+NAMES                                 IMAGE          STATUS       PORTS
+home_server-monitoring-loki-1         1107dd5274e0   Up 2 hours   
+home_server-monitoring-alloy-1        2aa2099af76c   Up 2 hours   
+home_server-monitoring-prometheus-1   efd719c99d83   Up 2 hours   
+home_server-monitoring-grafana-1      b28bae15e219   Up 2 hours   

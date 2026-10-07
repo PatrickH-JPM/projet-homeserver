@@ -1,0 +1,12 @@
+[Unit]
+Description=Home_server suivi des connexions reseau
+After=network-online.target
+[Service]
+ExecStart=/usr/sbin/conntrack -E -o timestamp,extended
+Restart=always
+RestartSec=2
+SyslogIdentifier=Home_server-NETFLOW
+StandardOutput=journal
+StandardError=journal
+[Install]
+WantedBy=multi-user.target

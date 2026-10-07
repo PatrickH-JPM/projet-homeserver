@@ -1,0 +1,10 @@
+UNIT FILE                         STATE    PRESET
+Home_server-docker-events.service enabled  enabled
+Home_server-etat.service          static   -
+Home_server-firewall.service      enabled  enabled
+Home_server-flux.service          enabled  enabled
+Home_server-mail.service          static   -
+Home_server-etat.timer            enabled  enabled
+Home_server-mail.timer            disabled enabled
+
+7 unit files listed.

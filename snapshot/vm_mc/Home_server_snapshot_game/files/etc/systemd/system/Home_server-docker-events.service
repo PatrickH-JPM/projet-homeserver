@@ -1,0 +1,11 @@
+[Unit]
+Description=Home_server evenements Docker
+After=docker.service
+Requires=docker.service
+[Service]
+ExecStart=/usr/bin/docker events --format {{json .}}
+Restart=always
+RestartSec=2
+SyslogIdentifier=Home_server-DOCKER
+[Install]
+WantedBy=multi-user.target

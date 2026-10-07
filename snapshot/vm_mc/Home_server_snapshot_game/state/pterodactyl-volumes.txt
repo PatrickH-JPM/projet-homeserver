@@ -1,0 +1,12 @@
+/var/lib/pterodactyl/volumes
+/var/lib/pterodactyl/volumes/.sftp
+/var/lib/pterodactyl/volumes/23759af9-760e-41b2-b376-fab5d81b8944
+/var/lib/pterodactyl/volumes/23759af9-760e-41b2-b376-fab5d81b8944/versions
+/var/lib/pterodactyl/volumes/23759af9-760e-41b2-b376-fab5d81b8944/libraries
+/var/lib/pterodactyl/volumes/23759af9-760e-41b2-b376-fab5d81b8944/config
+/var/lib/pterodactyl/volumes/23759af9-760e-41b2-b376-fab5d81b8944/.paper
+/var/lib/pterodactyl/volumes/23759af9-760e-41b2-b376-fab5d81b8944/.cache
+/var/lib/pterodactyl/volumes/23759af9-760e-41b2-b376-fab5d81b8944/plugins
+/var/lib/pterodactyl/volumes/23759af9-760e-41b2-b376-fab5d81b8944/logs
+/var/lib/pterodactyl/volumes/23759af9-760e-41b2-b376-fab5d81b8944/world
+/var/lib/pterodactyl/volumes/23759af9-760e-41b2-b376-fab5d81b8944/cache

@@ -1,0 +1,14 @@
+----------------------------------------------------------------------------------------------------------------
+ COLLECTIONS                                                                                                    
+----------------------------------------------------------------------------------------------------------------
+ Name                                 📦 Status   Version  Local Path                                           
+----------------------------------------------------------------------------------------------------------------
+ crowdsecurity/base-http-scenarios    ✔️  enabled  1.4      /etc/crowdsec/collections/base-http-scenarios.yaml   
+ crowdsecurity/http-cve               ✔️  enabled  3.0      /etc/crowdsec/collections/http-cve.yaml              
+ crowdsecurity/linux                  ✔️  enabled  0.4      /etc/crowdsec/collections/linux.yaml                 
+ crowdsecurity/mariadb                ✔️  enabled  0.2      /etc/crowdsec/collections/mariadb.yaml               
+ crowdsecurity/mysql                  ✔️  enabled  0.2      /etc/crowdsec/collections/mysql.yaml                 
+ crowdsecurity/nginx                  ✔️  enabled  0.3      /etc/crowdsec/collections/nginx.yaml                 
+ crowdsecurity/sshd                   ✔️  enabled  0.9      /etc/crowdsec/collections/sshd.yaml                  
+ crowdsecurity/whitelist-good-actors  ✔️  enabled  0.4      /etc/crowdsec/collections/whitelist-good-actors.yaml 
+----------------------------------------------------------------------------------------------------------------

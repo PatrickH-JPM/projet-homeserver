@@ -1,0 +1,10 @@
+lo               UNKNOWN        127.0.0.1/8 
+enp3s0           UP             
+br-game          UP             
+br-mgmt          UP             192.168.3.10/24 
+br-svc           UP             
+vlan4@enp3s0     UP             
+vlan5@enp3s0     UP             
+virbr0           DOWN           192.168.122.1/24 
+vnet0            UNKNOWN        
+vnet1            UNKNOWN        

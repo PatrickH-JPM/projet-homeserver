@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------------------------------------------------
+ PARSERS                                                                                                             
+---------------------------------------------------------------------------------------------------------------------
+ Name                                📦 Status   Version  Local Path                                                 
+---------------------------------------------------------------------------------------------------------------------
+ crowdsecurity/dateparse-enrich      ✔️  enabled  0.2      /etc/crowdsec/parsers/s02-enrich/dateparse-enrich.yaml     
+ crowdsecurity/geoip-enrich          ✔️  enabled  0.5      /etc/crowdsec/parsers/s02-enrich/geoip-enrich.yaml         
+ crowdsecurity/http-logs             ✔️  enabled  1.4      /etc/crowdsec/parsers/s02-enrich/http-logs.yaml            
+ crowdsecurity/mariadb-logs          ✔️  enabled  0.4      /etc/crowdsec/parsers/s01-parse/mariadb-logs.yaml          
+ crowdsecurity/mysql-logs            ✔️  enabled  0.4      /etc/crowdsec/parsers/s01-parse/mysql-logs.yaml            
+ crowdsecurity/nginx-logs            ✔️  enabled  2.0      /etc/crowdsec/parsers/s01-parse/nginx-logs.yaml            
+ crowdsecurity/public-dns-allowlist  ✔️  enabled  0.1      /etc/crowdsec/parsers/s02-enrich/public-dns-allowlist.yaml 
+ crowdsecurity/sshd-logs             ✔️  enabled  3.1      /etc/crowdsec/parsers/s01-parse/sshd-logs.yaml             
+ crowdsecurity/sshd-success-logs     ✔️  enabled  0.1      /etc/crowdsec/parsers/s01-parse/sshd-success-logs.yaml     
+ crowdsecurity/syslog-logs           ✔️  enabled  1.0      /etc/crowdsec/parsers/s00-raw/syslog-logs.yaml             
+ crowdsecurity/whitelists            ✔️  enabled  0.3      /etc/crowdsec/parsers/s02-enrich/whitelists.yaml           
+---------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,2 @@
+NAMES                                  IMAGE                               STATUS                    PORTS
+23759af9-760e-41b2-b376-fab5d81b8944   ghcr.io/pterodactyl/yolks:java_25   Exited (0) 34 hours ago   

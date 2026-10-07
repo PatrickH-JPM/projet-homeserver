@@ -1,0 +1,16 @@
+Id:             2
+Name:           Home_server_mc
+UUID:           6718903d-e3d6-410a-9fde-afb43cd0e11f
+OS Type:        hvm
+State:          running
+CPU(s):         4
+CPU time:       1183,9s
+Max memory:     9437184 KiB
+Used memory:    9437184 KiB
+Persistent:     yes
+Autostart:      enable
+Managed save:   no
+Security model: apparmor
+Security DOI:   0
+Security label: libvirt-6718903d-e3d6-410a-9fde-afb43cd0e11f (enforcing)
+

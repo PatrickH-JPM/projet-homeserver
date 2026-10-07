@@ -1,0 +1,16 @@
+Id:             1
+Name:           Home_server_services
+UUID:           ba47a15b-767a-48dd-a578-ccd5b6439205
+OS Type:        hvm
+State:          running
+CPU(s):         2
+CPU time:       3159,2s
+Max memory:     4194304 KiB
+Used memory:    4194304 KiB
+Persistent:     yes
+Autostart:      enable
+Managed save:   no
+Security model: apparmor
+Security DOI:   0
+Security label: libvirt-ba47a15b-767a-48dd-a578-ccd5b6439205 (enforcing)
+

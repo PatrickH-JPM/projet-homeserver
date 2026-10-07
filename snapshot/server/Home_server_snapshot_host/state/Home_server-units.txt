@@ -1,0 +1,7 @@
+UNIT FILE                         STATE   PRESET
+Home_server-etat.service          static  -
+Home_server-flux.service          enabled enabled
+Home_server-host-firewall.service enabled enabled
+Home_server-etat.timer            enabled enabled
+
+4 unit files listed.

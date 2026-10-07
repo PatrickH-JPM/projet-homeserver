@@ -1,0 +1,14 @@
+/var/log/Home_server/*.log /var/log/Home_server/*.jsonl {
+ daily
+ rotate 14
+ maxsize 100M
+ missingok
+ notifempty
+ compress
+ delaycompress
+ create 0640 syslog adm
+ sharedscripts
+ postrotate
+  /usr/lib/rsyslog/rsyslog-rotate
+ endscript
+}

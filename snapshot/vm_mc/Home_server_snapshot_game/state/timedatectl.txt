@@ -1,0 +1,7 @@
+               Local time: Wed 2026-10-07 20:07:19 CEST
+           Universal time: Wed 2026-10-07 18:07:19 UTC
+                 RTC time: Wed 2026-10-07 18:07:19
+                Time zone: Europe/Paris (CEST, +0200)
+System clock synchronized: yes
+              NTP service: active
+          RTC in local TZ: no

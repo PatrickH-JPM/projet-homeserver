@@ -1,0 +1,5 @@
+REPOSITORY        TAG       DIGEST                                                                    IMAGE ID       CREATED       SIZE
+grafana/grafana   latest    sha256:b28bae15e219c998fb0e0424ed724930cc61b1f61fb404d47c862f9a23f9e572   b28bae15e219   8 days ago    1.94GB
+grafana/alloy     latest    sha256:2aa2099af76c0098d4af7a4d6e48f86cb66dc1a000222ad927a1c67c6542d13f   2aa2099af76c   9 days ago    946MB
+prom/prometheus   latest    sha256:efd719c99d83b060d9daefdcf00360461adf279f45ef5391f8d111892118753e   efd719c99d83   12 days ago   381MB
+grafana/loki      latest    sha256:1107dd5274e0ada47e42472b7a7e71f3b2a2fe878878108f3e2f9e51528f0193   1107dd5274e0   2 weeks ago   211MB

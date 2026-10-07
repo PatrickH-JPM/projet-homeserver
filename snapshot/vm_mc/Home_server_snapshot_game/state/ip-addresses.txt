@@ -1,0 +1,4 @@
+lo               UNKNOWN        127.0.0.1/8 
+ens3             UP             192.168.4.10/24 fe80::5054:ff:fe48:410/64 
+pterodactyl0     DOWN           172.18.0.1/16 fdba:17c8:6c94::1011/64 
+docker0          DOWN           172.17.0.1/16 

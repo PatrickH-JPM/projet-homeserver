@@ -1,0 +1,4 @@
+ Interface   Type     Source   Model    MAC
+-----------------------------------------------------------
+ vnet0       bridge   br-svc   virtio   52:54:00:48:05:10
+

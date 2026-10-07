@@ -1,0 +1,26 @@
+Error: unknown flag: --version
+Usage:
+  wings [flags]
+  wings [command]
+
+Available Commands:
+  completion  Generate the autocompletion script for the specified shell
+  configure   Use a token to configure wings automatically
+  diagnostics Collect and report information about this Wings instance to assist in debugging.
+  help        Help about any command
+  version     Prints the current executable version and exits.
+
+Flags:
+      --auto-tls                    pass in order to have wings generate and manage its own SSL certificates using Let's Encrypt
+      --config string               set the location for the configuration file (default "/etc/pterodactyl/config.yml")
+      --debug                       pass in order to run wings in debug mode
+  -h, --help                        help for wings
+      --ignore-certificate-errors   ignore certificate verification errors when executing API calls
+      --pprof                       if the pprof profiler should be enabled. The profiler will bind to localhost:6060 by default
+      --pprof-block-rate int        enables block profile support, may have performance impacts
+      --pprof-port int              If provided with --pprof, the port it will run on (default 6060)
+      --tls-hostname string         required with --auto-tls, the FQDN for the generated SSL certificate
+
+Use "wings [command] --help" for more information about a command.
+
+2026/10/07 20:07:19 failed to execute command: unknown flag: --version
