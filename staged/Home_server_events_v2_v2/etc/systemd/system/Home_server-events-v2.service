@@ -1,0 +1,21 @@
+[Unit]
+Description=Home_server normaliseur evenements V2
+After=rsyslog.service network-online.target
+Requires=rsyslog.service
+
+[Service]
+Type=simple
+User=Home_serverevents
+Group=adm
+ExecStart=/usr/local/sbin/Home_server-events-v2.py
+Restart=always
+RestartSec=2
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadOnlyPaths=/var/log/Home_server/brut.log /etc/Home_server-events-v2
+ReadWritePaths=/var/log/Home_server /var/lib/Home_server-events-v2
+
+[Install]
+WantedBy=multi-user.target
