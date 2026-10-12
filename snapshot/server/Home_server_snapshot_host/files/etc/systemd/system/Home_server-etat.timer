@@ -1,0 +1,10 @@
+[Unit]
+Description=Collecte locale de l etat des conteneurs
+
+[Timer]
+OnBootSec=2s
+OnUnitActiveSec=2s
+Unit=Home_server-etat.service
+
+[Install]
+WantedBy=timers.target

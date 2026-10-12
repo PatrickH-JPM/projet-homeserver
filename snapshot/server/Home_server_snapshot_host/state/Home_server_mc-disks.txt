@@ -1,0 +1,5 @@
+ Target   Source
+-----------------------------------------------------------
+ vda      /var/lib/libvirt/images/Home_server_mc.qcow2
+ sda      /var/lib/libvirt/images/Home_server_mc-seed.iso
+

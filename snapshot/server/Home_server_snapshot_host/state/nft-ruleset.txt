@@ -1,0 +1,286 @@
+table inet Home_server_host {
+	chain input {
+		type filter hook input priority filter + 10; policy drop;
+		iifname "lo" accept
+		ct state invalid drop
+		ct state established,related accept
+		iifname "br-mgmt" ip saddr { 10.10.10.2, 10.10.10.4, 192.168.2.100 } tcp dport 22 accept
+		iifname "br-mgmt" ip saddr 192.168.5.10 tcp dport 9100 accept
+		ip protocol icmp icmp type destination-unreachable accept
+		limit rate 5/minute burst 10 packets log prefix "FW-HOTE "
+	}
+
+	chain output {
+		type filter hook output priority filter + 10; policy drop;
+		oifname "lo" accept
+		ct state invalid drop
+		ct state established,related accept
+		ip daddr 192.168.5.10 tcp dport 1514 accept
+		ip daddr { 10.0.0.0/8, 100.64.0.0/10, 169.254.0.0/16, 172.16.0.0/12, 192.168.0.0/16 } drop
+		ip daddr { 9.9.9.9, 149.112.112.112 } udp dport 53 accept
+		ip daddr { 9.9.9.9, 149.112.112.112 } tcp dport 53 accept
+		udp dport 123 accept
+		tcp dport { 80, 443 } accept
+		limit rate 5/minute burst 10 packets log prefix "FW-HOTE-OUT "
+	}
+}
+table ip filter {
+	chain LIBVIRT_INP {
+		iifname "virbr0" udp dport 53 counter packets 0 bytes 0 accept
+		iifname "virbr0" tcp dport 53 counter packets 0 bytes 0 accept
+		iifname "virbr0" udp dport 67 counter packets 0 bytes 0 accept
+		iifname "virbr0" tcp dport 67 counter packets 0 bytes 0 accept
+	}
+
+	chain INPUT {
+		type filter hook input priority filter; policy accept;
+		counter packets 3982 bytes 346814 jump LIBVIRT_INP
+	}
+
+	chain LIBVIRT_OUT {
+		oifname "virbr0" udp dport 53 counter packets 0 bytes 0 accept
+		oifname "virbr0" tcp dport 53 counter packets 0 bytes 0 accept
+		oifname "virbr0" udp dport 68 counter packets 0 bytes 0 accept
+		oifname "virbr0" tcp dport 68 counter packets 0 bytes 0 accept
+	}
+
+	chain OUTPUT {
+		type filter hook output priority filter; policy accept;
+		counter packets 3944 bytes 4839814 jump LIBVIRT_OUT
+	}
+
+	chain LIBVIRT_FWO {
+		ip saddr 192.168.122.0/24 iifname "virbr0" counter packets 0 bytes 0 accept
+		iifname "virbr0" counter packets 0 bytes 0 reject
+	}
+
+	chain FORWARD {
+		type filter hook forward priority filter; policy accept;
+		counter packets 0 bytes 0 jump LIBVIRT_FWX
+		counter packets 0 bytes 0 jump LIBVIRT_FWI
+		counter packets 0 bytes 0 jump LIBVIRT_FWO
+	}
+
+	chain LIBVIRT_FWI {
+		ip daddr 192.168.122.0/24 oifname "virbr0" ct state related,established counter packets 0 bytes 0 accept
+		oifname "virbr0" counter packets 0 bytes 0 reject
+	}
+
+	chain LIBVIRT_FWX {
+		iifname "virbr0" oifname "virbr0" counter packets 0 bytes 0 accept
+	}
+}
+table ip nat {
+	chain LIBVIRT_PRT {
+		ip saddr 192.168.122.0/24 ip daddr 224.0.0.0/24 counter packets 0 bytes 0 return
+		ip saddr 192.168.122.0/24 ip daddr 255.255.255.255 counter packets 0 bytes 0 return
+		ip saddr 192.168.122.0/24 ip daddr != 192.168.122.0/24 ip protocol tcp counter packets 0 bytes 0 masquerade to :1024-65535
+		ip saddr 192.168.122.0/24 ip daddr != 192.168.122.0/24 ip protocol udp counter packets 0 bytes 0 masquerade to :1024-65535
+		ip saddr 192.168.122.0/24 ip daddr != 192.168.122.0/24 counter packets 0 bytes 0 masquerade
+	}
+
+	chain POSTROUTING {
+		type nat hook postrouting priority srcnat; policy accept;
+		counter packets 211 bytes 15261 jump LIBVIRT_PRT
+	}
+}
+table ip mangle {
+	chain LIBVIRT_PRT {
+		oifname "virbr0" udp dport 68 counter packets 0 bytes 0 xt target "CHECKSUM"
+	}
+
+	chain POSTROUTING {
+		type filter hook postrouting priority mangle; policy accept;
+		counter packets 3941 bytes 4839674 jump LIBVIRT_PRT
+	}
+}
+table ip6 filter {
+	chain LIBVIRT_INP {
+	}
+
+	chain INPUT {
+		type filter hook input priority filter; policy accept;
+		counter packets 0 bytes 0 jump LIBVIRT_INP
+	}
+
+	chain LIBVIRT_OUT {
+	}
+
+	chain OUTPUT {
+		type filter hook output priority filter; policy accept;
+		counter packets 0 bytes 0 jump LIBVIRT_OUT
+	}
+
+	chain LIBVIRT_FWO {
+	}
+
+	chain FORWARD {
+		type filter hook forward priority filter; policy accept;
+		counter packets 0 bytes 0 jump LIBVIRT_FWX
+		counter packets 0 bytes 0 jump LIBVIRT_FWI
+		counter packets 0 bytes 0 jump LIBVIRT_FWO
+	}
+
+	chain LIBVIRT_FWI {
+	}
+
+	chain LIBVIRT_FWX {
+	}
+}
+table ip6 nat {
+	chain LIBVIRT_PRT {
+	}
+
+	chain POSTROUTING {
+		type nat hook postrouting priority srcnat; policy accept;
+		counter packets 0 bytes 0 jump LIBVIRT_PRT
+	}
+}
+table ip6 mangle {
+	chain LIBVIRT_PRT {
+	}
+
+	chain POSTROUTING {
+		type filter hook postrouting priority mangle; policy accept;
+		counter packets 0 bytes 0 jump LIBVIRT_PRT
+	}
+}
+table bridge nat {
+	chain libvirt-I-vnet0 {
+		counter packets 8827 bytes 1652031 jump I-vnet0-mac
+		ether type ip counter packets 8746 bytes 1649527 jump I-vnet0-ipv4-ip
+		ether type ip counter packets 8746 bytes 1649527 accept
+		ether type arp counter packets 76 bytes 2128 jump I-vnet0-arp-mac
+		ether type arp counter packets 76 bytes 2128 jump I-vnet0-arp-ip
+		ether type arp counter packets 76 bytes 2128 accept
+		ether type 0x8035 counter packets 0 bytes 0 jump I-vnet0-rarp
+		ether type 0x0835 counter packets 0 bytes 0 accept
+		counter packets 5 bytes 376 drop
+		counter packets 0 bytes 0 accept
+	}
+
+	chain libvirt-O-vnet0 {
+		ether type ip counter packets 6589 bytes 11302745 jump O-vnet0-ipv4
+		ether type arp counter packets 80 bytes 3360 accept
+		ether type 0x8035 counter packets 0 bytes 0 jump O-vnet0-rarp
+		counter packets 0 bytes 0 drop
+		counter packets 0 bytes 0 accept
+	}
+
+	chain I-vnet0-mac {
+		ether saddr 52:54:00:48:05:10 counter packets 8827 bytes 1652031 return
+		counter packets 0 bytes 0 drop
+		counter packets 0 bytes 0 accept
+	}
+
+	chain I-vnet0-ipv4-ip {
+		ether type ip ip saddr 0.0.0.0 ip protocol udp counter packets 0 bytes 0 return
+		ether type ip ip saddr 192.168.5.10 counter packets 8746 bytes 1649527 return
+		counter packets 0 bytes 0 drop
+		counter packets 0 bytes 0 accept
+	}
+
+	chain O-vnet0-ipv4 {
+		counter packets 6589 bytes 11302745 accept
+		counter packets 0 bytes 0 accept
+	}
+
+	chain I-vnet0-arp-mac {
+		ether type arp xt match "arp" counter packets 76 bytes 2128 return
+		counter packets 0 bytes 0 drop
+		counter packets 0 bytes 0 accept
+	}
+
+	chain I-vnet0-arp-ip {
+		ether type arp xt match "arp" counter packets 76 bytes 2128 return
+		counter packets 0 bytes 0 drop
+		counter packets 0 bytes 0 accept
+	}
+
+	chain I-vnet0-rarp {
+		ether saddr 52:54:00:48:05:10 ether daddr ff:ff:ff:ff:ff:ff ether type 0x8035 xt match "arp" counter packets 0 bytes 0 accept
+		counter packets 0 bytes 0 drop
+		counter packets 0 bytes 0 accept
+	}
+
+	chain O-vnet0-rarp {
+		ether daddr ff:ff:ff:ff:ff:ff ether type 0x8035 xt match "arp" counter packets 0 bytes 0 accept
+		counter packets 0 bytes 0 drop
+		counter packets 0 bytes 0 accept
+	}
+
+	chain PREROUTING {
+		type filter hook prerouting priority dstnat; policy accept;
+		iifname "vnet0" counter packets 8827 bytes 1652031 jump libvirt-I-vnet0
+		iifname "vnet1" counter packets 2061 bytes 3853948 jump libvirt-I-vnet1
+	}
+
+	chain POSTROUTING {
+		type filter hook postrouting priority srcnat; policy accept;
+		oifname "vnet0" counter packets 6669 bytes 11306105 jump libvirt-O-vnet0
+		oifname "vnet1" counter packets 4282 bytes 384175 jump libvirt-O-vnet1
+	}
+
+	chain libvirt-I-vnet1 {
+		counter packets 2061 bytes 3853948 jump I-vnet1-mac
+		ether type ip counter packets 1982 bytes 3851500 jump I-vnet1-ipv4-ip
+		ether type ip counter packets 1982 bytes 3851500 accept
+		ether type arp counter packets 74 bytes 2072 jump I-vnet1-arp-mac
+		ether type arp counter packets 74 bytes 2072 jump I-vnet1-arp-ip
+		ether type arp counter packets 74 bytes 2072 accept
+		ether type 0x8035 counter packets 0 bytes 0 jump I-vnet1-rarp
+		ether type 0x0835 counter packets 0 bytes 0 accept
+		counter packets 5 bytes 376 drop
+		counter packets 0 bytes 0 accept
+	}
+
+	chain libvirt-O-vnet1 {
+		ether type ip counter packets 4208 bytes 381067 jump O-vnet1-ipv4
+		ether type arp counter packets 74 bytes 3108 accept
+		ether type 0x8035 counter packets 0 bytes 0 jump O-vnet1-rarp
+		counter packets 0 bytes 0 drop
+		counter packets 0 bytes 0 accept
+	}
+
+	chain I-vnet1-mac {
+		ether saddr 52:54:00:48:04:10 counter packets 2061 bytes 3853948 return
+		counter packets 0 bytes 0 drop
+		counter packets 0 bytes 0 accept
+	}
+
+	chain I-vnet1-ipv4-ip {
+		ether type ip ip saddr 0.0.0.0 ip protocol udp counter packets 0 bytes 0 return
+		ether type ip ip saddr 192.168.4.10 counter packets 1982 bytes 3851500 return
+		counter packets 0 bytes 0 drop
+		counter packets 0 bytes 0 accept
+	}
+
+	chain O-vnet1-ipv4 {
+		counter packets 4208 bytes 381067 accept
+		counter packets 0 bytes 0 accept
+	}
+
+	chain I-vnet1-arp-mac {
+		ether type arp xt match "arp" counter packets 74 bytes 2072 return
+		counter packets 0 bytes 0 drop
+		counter packets 0 bytes 0 accept
+	}
+
+	chain I-vnet1-arp-ip {
+		ether type arp xt match "arp" counter packets 74 bytes 2072 return
+		counter packets 0 bytes 0 drop
+		counter packets 0 bytes 0 accept
+	}
+
+	chain I-vnet1-rarp {
+		ether saddr 52:54:00:48:04:10 ether daddr ff:ff:ff:ff:ff:ff ether type 0x8035 xt match "arp" counter packets 0 bytes 0 accept
+		counter packets 0 bytes 0 drop
+		counter packets 0 bytes 0 accept
+	}
+
+	chain O-vnet1-rarp {
+		ether daddr ff:ff:ff:ff:ff:ff ether type 0x8035 xt match "arp" counter packets 0 bytes 0 accept
+		counter packets 0 bytes 0 drop
+		counter packets 0 bytes 0 accept
+	}
+}

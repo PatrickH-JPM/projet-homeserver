@@ -1,0 +1,18 @@
+[Unit]
+Description=Resume des gravites rsyslog par SMTP
+After=network-online.target rsyslog.service
+
+[Service]
+Type=oneshot
+User=Home_servermail
+Group=Home_servermail
+SupplementaryGroups=adm
+ExecStart=/usr/local/sbin/Home_server-mail.py
+TimeoutStartSec=55
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/Home_server-mail /var/lib/Home_server-mail-public
+RestrictAddressFamilies=AF_INET AF_UNIX

@@ -1,0 +1,5 @@
+ Target   Source
+-----------------------------------------------------------------
+ vda      /var/lib/libvirt/images/Home_server_services.qcow2
+ sda      /var/lib/libvirt/images/Home_server_services-seed.iso
+

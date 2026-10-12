@@ -1,0 +1,9 @@
+----------------------------------------------------------------------------------------------------------------
+ COLLECTIONS                                                                                                    
+----------------------------------------------------------------------------------------------------------------
+ Name                                 📦 Status   Version  Local Path                                           
+----------------------------------------------------------------------------------------------------------------
+ crowdsecurity/linux                  ✔️  enabled  0.4      /etc/crowdsec/collections/linux.yaml                 
+ crowdsecurity/sshd                   ✔️  enabled  0.9      /etc/crowdsec/collections/sshd.yaml                  
+ crowdsecurity/whitelist-good-actors  ✔️  enabled  0.4      /etc/crowdsec/collections/whitelist-good-actors.yaml 
+----------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,30 @@
+﻿# Secrets
+*.env
+*secret*
+*.key
+*.pem
+*.p12
+*.pfx
+credentials*
+*password*
+
+# Disques / sauvegardes lourdes
+*.qcow2
+*.img
+*.iso
+*.tar
+*.tar.gz
+
+# Runtime
+*.log
+*.pid
+*.sock
+*.db
+*.sqlite
+*.sqlite3
+
+# Divers
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db

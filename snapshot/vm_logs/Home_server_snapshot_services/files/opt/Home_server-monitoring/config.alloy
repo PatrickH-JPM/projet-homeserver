@@ -1,0 +1,15 @@
+local.file_match "Home_server" {
+ path_targets = [{__path__ = "/var/log/Home_server/evenements.jsonl", job = "Home_server"}]
+}
+loki.source.file "Home_server" {
+ targets = local.file_match.Home_server.targets
+ forward_to = [loki.process.Home_server.receiver]
+}
+loki.process "Home_server" {
+ stage.json { expressions = {tag = "tag", source = "source", host = "host", severity = "severity", message = "message"} }
+ stage.labels { values = {tag = "", source = "", host = "", severity = ""} }
+ forward_to = [loki.write.local.receiver]
+}
+loki.write "local" {
+ endpoint { url = "http://127.0.0.1:3100/loki/api/v1/push" }
+}

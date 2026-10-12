@@ -1,0 +1,9 @@
+apiVersion: 1
+providers:
+  - name: Home_server
+    orgId: 1
+    folder: Infrastructure
+    type: file
+    disableDeletion: true
+    options:
+      path: /var/lib/grafana-dashboards

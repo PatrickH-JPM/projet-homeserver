@@ -1,0 +1,8 @@
+[Unit]
+Description=Lecture reguliere des alertes rsyslog
+[Timer]
+OnBootSec=60s
+OnUnitActiveSec=2s
+Unit=Home_server-mail.service
+[Install]
+WantedBy=timers.target
