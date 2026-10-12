@@ -59,6 +59,7 @@ else
   for p in 8080 9100 9940; do $IPT -A PJ-OUT -d "$GAME_IP" -p tcp --dport "$p" -j ACCEPT; done
   $IPT -A PJ-OUT -d "$HOST_IP" -p tcp --dport 9100 -j ACCEPT
 fi
+$IPT -A PJ-OUT -d 192.168.5.1 -p udp --dport 161 -j ACCEPT
 PRIVATE_NETS=(10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 100.64.0.0/10 169.254.0.0/16 "$FAMILY_CIDR")
 for n in "${PRIVATE_NETS[@]}"; do
   $IPT -A PJ-OUT -d "$n" -m limit --limit 12/min -j LOG --log-prefix "PROTECTED-OUT "

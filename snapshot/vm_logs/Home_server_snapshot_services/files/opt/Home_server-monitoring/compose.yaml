@@ -24,7 +24,7 @@ services:
       - --storage.tsdb.retention.size=2GB
     restart: unless-stopped
     mem_limit: 768m
-    cpus: 0.25
+    cpus: 0.50
     cap_drop: [ALL]
     security_opt: [no-new-privileges:true]
     volumes:
@@ -35,8 +35,8 @@ services:
     user: "472:472"
     network_mode: host
     restart: unless-stopped
-    mem_limit: 768m
-    cpus: 0.25
+    mem_limit: 1g
+    cpus: 0.50
     cap_drop: [ALL]
     security_opt: [no-new-privileges:true]
     environment:

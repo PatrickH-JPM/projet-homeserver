@@ -1,0 +1,10 @@
+[Unit]
+Description=Home_server - collecte etat services et Docker
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/Home_server-etat.py
+User=root
+Group=root
+Nice=5

@@ -1,0 +1,11 @@
+[Unit]
+Description=Home_server - collecte etat toutes les 2 secondes
+
+[Timer]
+OnBootSec=2s
+OnUnitActiveSec=2s
+AccuracySec=250ms
+Unit=Home_server-etat.service
+
+[Install]
+WantedBy=timers.target

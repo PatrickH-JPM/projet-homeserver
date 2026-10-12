@@ -1,0 +1,803 @@
+{
+  "uid": "Home_server-reseau",
+  "title": "Réseau & Sécurité",
+  "schemaVersion": 39,
+  "version": 4,
+  "editable": false,
+  "tags": [
+    "Home_server"
+  ],
+  "timezone": "browser",
+  "refresh": "2s",
+  "liveNow": true,
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "2s",
+      "3s",
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m"
+    ]
+  },
+  "graphTooltip": 1,
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  },
+  "links": [],
+  "panels": [
+    {
+      "id": 1,
+      "title": "ER605 — état LAN",
+      "type": "stat",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 3,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "max(Home_server_er605_reachable{machine=\"Home_server_services\"}) or vector(0)",
+          "legendFormat": "ER605",
+          "instant": true,
+          "range": false
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "HORS LIGNE",
+                  "color": "red"
+                },
+                "1": {
+                  "text": "EN LIGNE",
+                  "color": "green"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 0
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "horizontal",
+        "textMode": "auto",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "wideLayout": true,
+        "text": {
+          "titleSize": 15,
+          "valueSize": 24
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "ER605 — CPU",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 3,
+        "y": 0,
+        "w": 3,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "Home_server_er605_cpu_percent{machine=\"Home_server_services\"}",
+          "legendFormat": "CPU"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "mode": "none",
+              "group": "A"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": []
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "description": "CPU/RAM disponibles uniquement si le service SNMP read-only est activé sur l’ER605 et expose les OID compatibles."
+    },
+    {
+      "id": 3,
+      "title": "ER605 — RAM",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 6,
+        "y": 0,
+        "w": 3,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "Home_server_er605_memory_percent{machine=\"Home_server_services\"}",
+          "legendFormat": "RAM"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "mode": "none",
+              "group": "A"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": []
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "description": "CPU/RAM disponibles uniquement si le service SNMP read-only est activé sur l’ER605 et expose les OID compatibles."
+    },
+    {
+      "id": 14,
+      "title": "WAN entrant — connexions actives",
+      "type": "stat",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 9,
+        "y": 0,
+        "w": 3,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(Home_server_wan_inbound_connections_total)",
+          "legendFormat": "Connexions",
+          "instant": true,
+          "range": false
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "horizontal",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "wideLayout": true,
+        "text": {
+          "titleSize": 15,
+          "valueSize": 24
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "WireGuard — pairs actifs",
+      "type": "table",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "max by (peer,name) (Home_server_wireguard_peer_active)",
+          "format": "table",
+          "instant": true,
+          "range": false
+        }
+      ],
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "instance": true,
+              "job": true,
+              "machine": true
+            },
+            "indexByName": {
+              "peer": 0,
+              "name": 1,
+              "Value": 2
+            },
+            "renameByName": {
+              "peer": "IP WireGuard",
+              "name": "Appareil",
+              "Value": "État"
+            }
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "noValue": "Aucun pair actif"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "État"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "1": {
+                        "text": "ACTIF",
+                        "color": "green"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        }
+      },
+      "description": "ACTIF = pair WireGuard observé dans une connexion Linux active. Le handshake exact reste dépendant de la télémétrie ER605."
+    },
+    {
+      "id": 13,
+      "title": "WAN entrant actif — IP publiques uniquement",
+      "type": "table",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (peer,protocol,port,service) (Home_server_wan_inbound_connections)",
+          "format": "table",
+          "instant": true,
+          "range": false
+        }
+      ],
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "instance": true,
+              "job": true,
+              "machine": true
+            },
+            "indexByName": {
+              "peer": 0,
+              "Value": 1,
+              "service": 2,
+              "port": 3,
+              "protocol": 4
+            },
+            "renameByName": {
+              "peer": "IP distante",
+              "Value": "Connexions actives",
+              "service": "Service",
+              "port": "Port",
+              "protocol": "Protocole"
+            }
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "noValue": "Aucune connexion WAN entrante active"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Connexions actives"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        }
+      },
+      "description": "Uniquement les flux actifs dont le tuple original est IP publique → IP locale. Les connexions sortantes vers Internet sont exclues."
+    },
+    {
+      "id": 7,
+      "title": "Connexions réseau — historique par état",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "Home_server_conntrack_connections{state=\"ESTABLISHED\"}",
+          "legendFormat": "ESTABLISHED"
+        },
+        {
+          "refId": "B",
+          "expr": "Home_server_conntrack_connections{state=\"SYN_SENT\"}",
+          "legendFormat": "SYN_SENT"
+        },
+        {
+          "refId": "C",
+          "expr": "Home_server_conntrack_connections{state=\"SYN_RECV\"}",
+          "legendFormat": "SYN_RECV"
+        },
+        {
+          "refId": "D",
+          "expr": "Home_server_conntrack_connections{state=\"TIME_WAIT\"}",
+          "legendFormat": "TIME_WAIT"
+        },
+        {
+          "refId": "E",
+          "expr": "Home_server_conntrack_connections{state=\"FIN_WAIT\"}",
+          "legendFormat": "FIN_WAIT"
+        },
+        {
+          "refId": "F",
+          "expr": "Home_server_conntrack_connections{state=\"CLOSE_WAIT\"}",
+          "legendFormat": "CLOSE_WAIT"
+        },
+        {
+          "refId": "G",
+          "expr": "Home_server_conntrack_connections{state=\"UDP\"}",
+          "legendFormat": "UDP"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 18,
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "mode": "normal",
+              "group": "A"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": []
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "description": "Graphe empilé façon Munin ; nécessite snapshot périodique conntrack."
+    },
+    {
+      "id": 5,
+      "title": "Console ER605 / WireGuard",
+      "type": "logs",
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 12,
+        "w": 24,
+        "h": 6
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"Home_server\",source=\"192.168.5.1\"} | json | line_format \"{{.message}}\"",
+          "queryType": "range",
+          "maxLines": 200,
+          "direction": "backward"
+        }
+      ],
+      "options": {
+        "showTime": true,
+        "showLabels": false,
+        "showCommonLabels": false,
+        "wrapLogMessage": true,
+        "prettifyLogMessage": false,
+        "enableLogDetails": false,
+        "sortOrder": "Ascending",
+        "dedupStrategy": "none",
+        "enableInfiniteScrolling": true,
+        "showControls": true,
+        "fontSize": "small",
+        "noDataText": "Aucun événement sur la période"
+      },
+      "description": "Nouvelles lignes en bas ; historique accessible par scroll.",
+      "maxDataPoints": 250,
+      "fieldConfig": {
+        "defaults": {
+          "noValue": "Aucun événement sur la période"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "title": "Console réseau / conntrack",
+      "type": "logs",
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 18,
+        "w": 24,
+        "h": 6
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"Home_server\",tag=\"NETFLOW\"} | json | line_format \"{{.message}}\"",
+          "queryType": "range",
+          "maxLines": 200,
+          "direction": "backward"
+        }
+      ],
+      "options": {
+        "showTime": true,
+        "showLabels": false,
+        "showCommonLabels": false,
+        "wrapLogMessage": true,
+        "prettifyLogMessage": false,
+        "enableLogDetails": false,
+        "sortOrder": "Ascending",
+        "dedupStrategy": "none",
+        "enableInfiniteScrolling": true,
+        "showControls": true,
+        "fontSize": "small",
+        "noDataText": "Aucun événement sur la période"
+      },
+      "maxDataPoints": 250,
+      "fieldConfig": {
+        "defaults": {
+          "noValue": "Aucun événement sur la période"
+        }
+      }
+    },
+    {
+      "id": 9,
+      "title": "Console pare-feu — tous les refus",
+      "type": "logs",
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 24,
+        "w": 24,
+        "h": 6
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"Home_server\"} |~ \"FW-(SERVEUR|DOCKER|HOTE)|PROTECTED-\" | json | line_format \"{{.message}}\"",
+          "queryType": "range",
+          "maxLines": 200,
+          "direction": "backward"
+        }
+      ],
+      "options": {
+        "showTime": true,
+        "showLabels": false,
+        "showCommonLabels": false,
+        "wrapLogMessage": true,
+        "prettifyLogMessage": false,
+        "enableLogDetails": false,
+        "sortOrder": "Ascending",
+        "dedupStrategy": "none",
+        "enableInfiniteScrolling": true,
+        "showControls": true,
+        "fontSize": "small",
+        "noDataText": "Aucun événement sur la période"
+      },
+      "description": "Aucun événement n’est masqué.",
+      "maxDataPoints": 250,
+      "fieldConfig": {
+        "defaults": {
+          "noValue": "Aucun événement sur la période"
+        }
+      }
+    },
+    {
+      "id": 10,
+      "title": "Console CrowdSec / SSH",
+      "type": "logs",
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 30,
+        "w": 24,
+        "h": 6
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"Home_server\",tag=\"CROWDSEC\"} | json | line_format \"{{.message}}\"",
+          "queryType": "range",
+          "maxLines": 200,
+          "direction": "backward"
+        },
+        {
+          "refId": "B",
+          "expr": "{job=\"Home_server\"} |~ \"(?i)(Failed password|Accepted publickey|authentication failure)\" | json | line_format \"{{.message}}\"",
+          "queryType": "range",
+          "maxLines": 200,
+          "direction": "backward"
+        }
+      ],
+      "options": {
+        "showTime": true,
+        "showLabels": false,
+        "showCommonLabels": false,
+        "wrapLogMessage": true,
+        "prettifyLogMessage": false,
+        "enableLogDetails": false,
+        "sortOrder": "Ascending",
+        "dedupStrategy": "none",
+        "enableInfiniteScrolling": true,
+        "showControls": true,
+        "fontSize": "small",
+        "noDataText": "Aucun événement sur la période"
+      },
+      "maxDataPoints": 250,
+      "fieldConfig": {
+        "defaults": {
+          "noValue": "Aucun événement sur la période"
+        }
+      }
+    },
+    {
+      "id": 12,
+      "title": "Console système / Docker / nginx",
+      "type": "logs",
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 36,
+        "w": 24,
+        "h": 6
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "{job=\"Home_server\",tag=~\"SYSTEME|DOCKER|NGINX\"} | json | line_format \"{{.message}}\"",
+          "queryType": "range",
+          "maxLines": 200,
+          "direction": "backward"
+        }
+      ],
+      "options": {
+        "showTime": true,
+        "showLabels": false,
+        "showCommonLabels": false,
+        "wrapLogMessage": true,
+        "prettifyLogMessage": false,
+        "enableLogDetails": false,
+        "sortOrder": "Ascending",
+        "dedupStrategy": "none",
+        "enableInfiniteScrolling": true,
+        "showControls": true,
+        "fontSize": "small",
+        "noDataText": "Aucun événement sur la période"
+      },
+      "maxDataPoints": 250,
+      "fieldConfig": {
+        "defaults": {
+          "noValue": "Aucun événement sur la période"
+        }
+      }
+    }
+  ]
+}

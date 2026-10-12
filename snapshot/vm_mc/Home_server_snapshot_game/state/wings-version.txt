@@ -23,4 +23,4 @@ Flags:
 
 Use "wings [command] --help" for more information about a command.
 
-2026/10/12 20:01:07 failed to execute command: unknown flag: --version
+2026/10/13 00:13:37 failed to execute command: unknown flag: --version

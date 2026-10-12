@@ -1,0 +1,13 @@
+[Unit]
+Description=Home_server - console Minecraft vers syslog
+After=docker.service wings.service
+Requires=docker.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/sbin/Home_server-minecraft-console.sh
+Restart=always
+RestartSec=1
+
+[Install]
+WantedBy=multi-user.target

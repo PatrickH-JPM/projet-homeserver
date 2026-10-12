@@ -1,8 +1,11 @@
-UNIT FILE                         STATE    PRESET
-Home_server-docker-events.service enabled  enabled
-Home_server-etat.service          static   -
-Home_server-firewall.service      enabled  enabled
-Home_server-flux.service          disabled enabled
-Home_server-etat.timer            disabled enabled
+UNIT FILE                             STATE    PRESET
+Home_server-conntrack.service         static   -
+Home_server-docker-events.service     enabled  enabled
+Home_server-etat.service              static   -
+Home_server-firewall.service          enabled  enabled
+Home_server-flux.service              disabled enabled
+Home_server-minecraft-console.service enabled  enabled
+Home_server-conntrack.timer           enabled  enabled
+Home_server-etat.timer                enabled  enabled
 
-5 unit files listed.
+8 unit files listed.

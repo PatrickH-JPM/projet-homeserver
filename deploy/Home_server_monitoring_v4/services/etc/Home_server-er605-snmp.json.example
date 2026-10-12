@@ -1,0 +1,5 @@
+{
+  "enabled": false,
+  "host": "192.168.5.1",
+  "community": "CHANGE_ME"
+}

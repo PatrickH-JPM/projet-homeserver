@@ -1,9 +1,10 @@
 [Unit]
-Description=Mesure locale des services et conteneurs
-After=docker.service
+Description=Home_server - collecte etat services et Docker
+After=network-online.target
 
 [Service]
 Type=oneshot
-User=root
 ExecStart=/usr/local/sbin/Home_server-etat.py
-TimeoutStartSec=45
+User=root
+Group=root
+Nice=5

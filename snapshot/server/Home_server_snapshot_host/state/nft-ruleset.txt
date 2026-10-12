@@ -34,7 +34,7 @@ table ip filter {
 
 	chain INPUT {
 		type filter hook input priority filter; policy accept;
-		counter packets 3982 bytes 346814 jump LIBVIRT_INP
+		counter packets 78806 bytes 19575523 jump LIBVIRT_INP
 	}
 
 	chain LIBVIRT_OUT {
@@ -46,7 +46,7 @@ table ip filter {
 
 	chain OUTPUT {
 		type filter hook output priority filter; policy accept;
-		counter packets 3944 bytes 4839814 jump LIBVIRT_OUT
+		counter packets 78293 bytes 139861938 jump LIBVIRT_OUT
 	}
 
 	chain LIBVIRT_FWO {
@@ -81,7 +81,7 @@ table ip nat {
 
 	chain POSTROUTING {
 		type nat hook postrouting priority srcnat; policy accept;
-		counter packets 211 bytes 15261 jump LIBVIRT_PRT
+		counter packets 396 bytes 28594 jump LIBVIRT_PRT
 	}
 }
 table ip mangle {
@@ -91,7 +91,7 @@ table ip mangle {
 
 	chain POSTROUTING {
 		type filter hook postrouting priority mangle; policy accept;
-		counter packets 3941 bytes 4839674 jump LIBVIRT_PRT
+		counter packets 78291 bytes 139861874 jump LIBVIRT_PRT
 	}
 }
 table ip6 filter {
@@ -147,12 +147,12 @@ table ip6 mangle {
 }
 table bridge nat {
 	chain libvirt-I-vnet0 {
-		counter packets 8827 bytes 1652031 jump I-vnet0-mac
-		ether type ip counter packets 8746 bytes 1649527 jump I-vnet0-ipv4-ip
-		ether type ip counter packets 8746 bytes 1649527 accept
-		ether type arp counter packets 76 bytes 2128 jump I-vnet0-arp-mac
-		ether type arp counter packets 76 bytes 2128 jump I-vnet0-arp-ip
-		ether type arp counter packets 76 bytes 2128 accept
+		counter packets 312929 bytes 145441123 jump I-vnet0-mac
+		ether type ip counter packets 312437 bytes 145427111 jump I-vnet0-ipv4-ip
+		ether type ip counter packets 312437 bytes 145427111 accept
+		ether type arp counter packets 487 bytes 13636 jump I-vnet0-arp-mac
+		ether type arp counter packets 487 bytes 13636 jump I-vnet0-arp-ip
+		ether type arp counter packets 487 bytes 13636 accept
 		ether type 0x8035 counter packets 0 bytes 0 jump I-vnet0-rarp
 		ether type 0x0835 counter packets 0 bytes 0 accept
 		counter packets 5 bytes 376 drop
@@ -160,39 +160,39 @@ table bridge nat {
 	}
 
 	chain libvirt-O-vnet0 {
-		ether type ip counter packets 6589 bytes 11302745 jump O-vnet0-ipv4
-		ether type arp counter packets 80 bytes 3360 accept
+		ether type ip counter packets 281813 bytes 418270725 jump O-vnet0-ipv4
+		ether type arp counter packets 491 bytes 20622 accept
 		ether type 0x8035 counter packets 0 bytes 0 jump O-vnet0-rarp
 		counter packets 0 bytes 0 drop
 		counter packets 0 bytes 0 accept
 	}
 
 	chain I-vnet0-mac {
-		ether saddr 52:54:00:48:05:10 counter packets 8827 bytes 1652031 return
+		ether saddr 52:54:00:48:05:10 counter packets 312929 bytes 145441123 return
 		counter packets 0 bytes 0 drop
 		counter packets 0 bytes 0 accept
 	}
 
 	chain I-vnet0-ipv4-ip {
 		ether type ip ip saddr 0.0.0.0 ip protocol udp counter packets 0 bytes 0 return
-		ether type ip ip saddr 192.168.5.10 counter packets 8746 bytes 1649527 return
+		ether type ip ip saddr 192.168.5.10 counter packets 312437 bytes 145427111 return
 		counter packets 0 bytes 0 drop
 		counter packets 0 bytes 0 accept
 	}
 
 	chain O-vnet0-ipv4 {
-		counter packets 6589 bytes 11302745 accept
+		counter packets 281813 bytes 418270725 accept
 		counter packets 0 bytes 0 accept
 	}
 
 	chain I-vnet0-arp-mac {
-		ether type arp xt match "arp" counter packets 76 bytes 2128 return
+		ether type arp xt match "arp" counter packets 487 bytes 13636 return
 		counter packets 0 bytes 0 drop
 		counter packets 0 bytes 0 accept
 	}
 
 	chain I-vnet0-arp-ip {
-		ether type arp xt match "arp" counter packets 76 bytes 2128 return
+		ether type arp xt match "arp" counter packets 487 bytes 13636 return
 		counter packets 0 bytes 0 drop
 		counter packets 0 bytes 0 accept
 	}
@@ -211,23 +211,23 @@ table bridge nat {
 
 	chain PREROUTING {
 		type filter hook prerouting priority dstnat; policy accept;
-		iifname "vnet0" counter packets 8827 bytes 1652031 jump libvirt-I-vnet0
-		iifname "vnet1" counter packets 2061 bytes 3853948 jump libvirt-I-vnet1
+		iifname "vnet0" counter packets 312929 bytes 145441123 jump libvirt-I-vnet0
+		iifname "vnet1" counter packets 134037 bytes 272833390 jump libvirt-I-vnet1
 	}
 
 	chain POSTROUTING {
 		type filter hook postrouting priority srcnat; policy accept;
-		oifname "vnet0" counter packets 6669 bytes 11306105 jump libvirt-O-vnet0
-		oifname "vnet1" counter packets 4282 bytes 384175 jump libvirt-O-vnet1
+		oifname "vnet0" counter packets 282304 bytes 418291347 jump libvirt-O-vnet0
+		oifname "vnet1" counter packets 184554 bytes 78553255 jump libvirt-O-vnet1
 	}
 
 	chain libvirt-I-vnet1 {
-		counter packets 2061 bytes 3853948 jump I-vnet1-mac
-		ether type ip counter packets 1982 bytes 3851500 jump I-vnet1-ipv4-ip
-		ether type ip counter packets 1982 bytes 3851500 accept
-		ether type arp counter packets 74 bytes 2072 jump I-vnet1-arp-mac
-		ether type arp counter packets 74 bytes 2072 jump I-vnet1-arp-ip
-		ether type arp counter packets 74 bytes 2072 accept
+		counter packets 134037 bytes 272833390 jump I-vnet1-mac
+		ether type ip counter packets 133551 bytes 272819546 jump I-vnet1-ipv4-ip
+		ether type ip counter packets 133551 bytes 272819546 accept
+		ether type arp counter packets 481 bytes 13468 jump I-vnet1-arp-mac
+		ether type arp counter packets 481 bytes 13468 jump I-vnet1-arp-ip
+		ether type arp counter packets 481 bytes 13468 accept
 		ether type 0x8035 counter packets 0 bytes 0 jump I-vnet1-rarp
 		ether type 0x0835 counter packets 0 bytes 0 accept
 		counter packets 5 bytes 376 drop
@@ -235,39 +235,39 @@ table bridge nat {
 	}
 
 	chain libvirt-O-vnet1 {
-		ether type ip counter packets 4208 bytes 381067 jump O-vnet1-ipv4
-		ether type arp counter packets 74 bytes 3108 accept
+		ether type ip counter packets 184073 bytes 78533053 jump O-vnet1-ipv4
+		ether type arp counter packets 481 bytes 20202 accept
 		ether type 0x8035 counter packets 0 bytes 0 jump O-vnet1-rarp
 		counter packets 0 bytes 0 drop
 		counter packets 0 bytes 0 accept
 	}
 
 	chain I-vnet1-mac {
-		ether saddr 52:54:00:48:04:10 counter packets 2061 bytes 3853948 return
+		ether saddr 52:54:00:48:04:10 counter packets 134037 bytes 272833390 return
 		counter packets 0 bytes 0 drop
 		counter packets 0 bytes 0 accept
 	}
 
 	chain I-vnet1-ipv4-ip {
 		ether type ip ip saddr 0.0.0.0 ip protocol udp counter packets 0 bytes 0 return
-		ether type ip ip saddr 192.168.4.10 counter packets 1982 bytes 3851500 return
+		ether type ip ip saddr 192.168.4.10 counter packets 133551 bytes 272819546 return
 		counter packets 0 bytes 0 drop
 		counter packets 0 bytes 0 accept
 	}
 
 	chain O-vnet1-ipv4 {
-		counter packets 4208 bytes 381067 accept
+		counter packets 184073 bytes 78533053 accept
 		counter packets 0 bytes 0 accept
 	}
 
 	chain I-vnet1-arp-mac {
-		ether type arp xt match "arp" counter packets 74 bytes 2072 return
+		ether type arp xt match "arp" counter packets 481 bytes 13468 return
 		counter packets 0 bytes 0 drop
 		counter packets 0 bytes 0 accept
 	}
 
 	chain I-vnet1-arp-ip {
-		ether type arp xt match "arp" counter packets 74 bytes 2072 return
+		ether type arp xt match "arp" counter packets 481 bytes 13468 return
 		counter packets 0 bytes 0 drop
 		counter packets 0 bytes 0 accept
 	}
